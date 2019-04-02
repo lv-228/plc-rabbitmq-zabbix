@@ -40,12 +40,12 @@ abstract class daemon
 	abstract public function helpMessage();
 
 	//необходимые флаги из консоли
-	abstract public function getConsoleValues();
+	abstract public static function getConsoleValues();
 
 	//функция основной работы демона
 	abstract public function work($options);
 
-	protected function childSignalHandler($signo, $pid = null, $status = null)
+	public function childSignalHandler($signo, $pid = null, $status = null)
 	{
         switch($signo)
         {

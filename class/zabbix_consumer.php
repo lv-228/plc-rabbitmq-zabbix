@@ -2,7 +2,7 @@
 namespace zabbix;
 
 require_once('daemon_class.php');
-require_once '../vendor/autoload.php';
+require_once(__DIR__ . '/../vendor/autoload.php');
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 
 class consumer extends daemon
@@ -42,7 +42,7 @@ class consumer extends daemon
         parent::daemonStop($pid);
     }
 
-    public function getConsoleValues()
+    public static function getConsoleValues()
     {
         $shortopts = "";
         //ip zabbix сервера принимающего данные
@@ -101,24 +101,32 @@ class consumer extends daemon
         list($queue_name, ,) = $channel->queue_declare($options["queue"], false, true, false, false);
         $channel->queue_bind($queue_name, $options["exchenge"], $binding_key);
         $long_queue = function ($msg) use ($options) {
-            $decode_array = json_decode($msg->body, true)[0];
-            unset($decode_array[0]);
-            if (count($decode_array) > 250) {
+            $decode_array = json_decode($msg->body, true);
+            $timestamp = $decode_array['timestamp'];
+            if (count($decode_array) > 250)
+            {
                 $array_chunk = array_chunk($decode_array, 250);
-                for ($i = 0; $i < count($array_chunk); $i++) {
-                    for ($j = 0; $j < count($array_chunk[$i]); $j++) {
-                        $new_line = $options["n"] . " " . getKeyForMsgBody($array_chunk[$i][$j]) . " " . json_decode($msg->body, true)['timestamp'] . " " . '"' . $array_chunk[$i][$j][7] . '"' . "\n";
+                for ($i = 0; $i < count($array_chunk); $i++)
+                {
+                    foreach($array_chunk[$i] as $key => $value)
+                    {
+                        if($key == 'timestamp')
+                            continue;
+                        $new_line = '"' . $options["n"] . '"' . " " . '"' . $key . '"' . " " . $timestamp . " " . '"' . $value . '"' . "\n";
                         file_put_contents("boof.txt", $new_line, FILE_APPEND | LOCK_EX);
                     }
-                    shell_exec('zabbix_sender -z ' . $options["z"] . ' -T -i ' . __DIR__ . '/boof.txt');
-                    file_put_contents("boof.txt", '');
                 }
-            } else {
-                for ($j = 1; $j < count($decode_array); $j++) {
-                    $new_line = $options["n"] . " " . getKeyForMsgBody($decode_array[$j]) . " " . json_decode($msg->body, true)['timestamp'] . " " . '"' . $decode_array[$j][7] . '"' . "\n";
+            } 
+            else 
+            {
+                foreach ($decode_array as $key => $value)
+                {
+                    if($key == 'timestamp')
+                        continue;
+                    $new_line = '"' . $options["n"] . '"' . " " . '"' . $key . '"' . " " . $timestamp . " " . '"' . $value . '"' . "\n";
                     file_put_contents("boof.txt", $new_line, FILE_APPEND | LOCK_EX);
                 }
-                shell_exec('zabbix_sender -z ' . $options["z"] . ' -T -i ' . __DIR__ . '/boof.txt');
+                shell_exec('zabbix_sender -z ' . $options["z"] . ' -T -i ' . __DIR__ . '/../boof.txt');
                 file_put_contents("boof.txt", '');
             }
         };
