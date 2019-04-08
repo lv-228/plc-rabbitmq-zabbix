@@ -7,24 +7,28 @@ use ModbusTcpClient\Packet\ModbusFunction\ReadHoldingRegistersResponse;
 use ModbusTcpClient\Packet\ResponseFactory;
 use ModbusTcpClient\Utils\Endian;
 
-// set to true if you want to let others specify their own ip/ports for querying data
-// NB: this is a security risk!!!
-$canChangeIpPort = false;
+$returnJson = filter_var($_GET['json'] ?? false, FILTER_VALIDATE_BOOLEAN);
+
+// if you want to let others specify their own ip/ports for querying data create file named '.allow-change' in this directory
+// NB: this is a potential security risk!!!
+$canChangeIpPort = file_exists('.allow-change');
 
 $ip = '192.168.100.1';
 $port = 502;
 if ($canChangeIpPort) {
     $ip = filter_var($_GET['ip'], FILTER_VALIDATE_IP) ? $_GET['ip'] : $ip;
-    $port = ((int)$_GET['port']) ?: $port;
+    $port = (int)($_GET['port'] ?? $port);
 }
 
-$unitId = ((int)$_GET['unitid']) ?: 0;
-$address = ((int)$_GET['address']) ?: 256;
-$quantity = ((int)$_GET['quantity']) ?: 12;
-$endianess = ((int)$_GET['endianess']) ?: Endian::BIG_ENDIAN_LOW_WORD_FIRST;
+$unitId = (int)($_GET['unitid'] ?? 0);
+$address = (int)($_GET['address'] ?? 256);
+$quantity = (int)($_GET['quantity'] ?? 12);
+$endianess = (int)($_GET['endianess'] ?? Endian::BIG_ENDIAN_LOW_WORD_FIRST);
 Endian::$defaultEndian = $endianess;
 
-echo "Using: ip: {$ip}, port: {$port}, address: {$address}, quantity: {$quantity}, endianess: {$endianess}<br>" . PHP_EOL;
+$log = [];
+$log[] = "Using: ip: {$ip}, port: {$port}, address: {$address}, quantity: {$quantity}, endianess: {$endianess}";
+
 $connection = BinaryStreamConnection::getBuilder()
     ->setPort($port)
     ->setHost($ip)
@@ -32,12 +36,12 @@ $connection = BinaryStreamConnection::getBuilder()
 
 
 $packet = new ReadHoldingRegistersRequest($address, $quantity, $unitId);
-echo 'Packet to be sent (in hex): ' . $packet->toHex() . '<br>' . PHP_EOL;
+$log[] = 'Packet to be sent (in hex): ' . $packet->toHex();
 
 $result = [];
 try {
     $binaryData = $connection->connect()->sendAndReceive($packet);
-    echo 'Binary received (in hex):   ' . unpack('H*', $binaryData)[1] . '<br>' . PHP_EOL;
+    $log[] = 'Binary received (in hex):   ' . unpack('H*', $binaryData)[1];
 
     /** @var $response ReadHoldingRegistersResponse */
     $response = ResponseFactory::parseResponseOrThrow($binaryData)->withStartAddress($address);
@@ -78,15 +82,54 @@ try {
     }
 
 } catch (Exception $exception) {
-    echo 'An exception occurred' . PHP_EOL;
-    echo $exception->getMessage() . PHP_EOL;
-    echo $exception->getTraceAsString() . PHP_EOL;
+    $result = null;
+    $log[] = 'An exception occurred';
+    $log[] = $exception->getMessage();
+    $log[] = $exception->getTraceAsString();
 } finally {
     $connection->close();
 }
 
+if ($returnJson) {
+    header('Access-Control-Allow-Origin: *');
+    header('Content-Type: application/json');
+    http_response_code($result !== null ? 200 : 500);
+    echo json_encode(
+        [
+            'data' => $result,
+            'debug' => $log
+        ],
+        JSON_PRETTY_PRINT
+    );
+
+    exit(0);
+}
+
 ?>
 
+<h2>Example FC3 request</h2>
+<form>
+    IP: <input type="text" name="ip" value="<?php echo $ip; ?>" <?php if (!$canChangeIpPort) { echo 'disabled'; } ?>><br>
+    Port: <input type="number" name="port" value="<?php echo $port; ?>"><br>
+    Address: <input type="number" name="address" value="<?php echo $address; ?>"><br>
+    Quantity: <input type="number" name="quantity" value="<?php echo $quantity; ?>"><br>
+    Endianess: <select name="endianess">
+        <option value="1" <?php if ($endianess === 1) { echo 'selected'; } ?>>BIG_ENDIAN</option>
+        <option value="5" <?php if ($endianess === 5) { echo 'selected'; } ?>>BIG_ENDIAN_LOW_WORD_FIRST</option>
+        <option value="2" <?php if ($endianess === 2) { echo 'selected'; } ?>>LITTLE_ENDIAN</option>
+        <option value="6" <?php if ($endianess === 6) { echo 'selected'; } ?>>LITTLE_ENDIAN_LOW_WORD_FIRST</option>
+    </select><br>
+    <button type="submit">Send</button>
+</form>
+<h2>Debug info</h2>
+<pre>
+<?php
+foreach ($log as $m) {
+    echo $m . PHP_EOL;
+}
+?>
+</pre>
+<h2>Result</h2>
 <table border="1">
     <tr>
         <td rowspan="2">WORD<br>address</td>

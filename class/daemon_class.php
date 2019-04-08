@@ -13,7 +13,7 @@ abstract class daemon
         }
         //Делаем основным процессом дочерний.
         posix_setsid();
-        $options = $this->getConsoleValues();
+         $options = $this->getConsoleValues();
         $title = $this->systemData($options);
         $pid = getmypid(); // вы можете использовать это, чтобы увидеть заголовок процесса в ps
         if (!cli_set_process_title($title)) 

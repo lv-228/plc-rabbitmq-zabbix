@@ -131,36 +131,23 @@ class sender extends daemon
 
         $registers = 
         [
-            ['uri' => $uri, 'type' => 'uint16', 'address' => 1, 'name' => 'dc1.ventilation.valve1.position'],
-            ['uri' => $uri, 'type' => 'uint16', 'address' => 2, 'name' => 'dc1.ventilation.fan2.status'],
-            // will be split into 2 requests as 1 request can return only range of 124 registers max
-            ['uri' => $uri, 'type' => 'uint16', 'address' => 3, 'name' => 'dc1.heating.heater2.status'],
-            ['uri' => $uri, 'type' => 'uint16', 'address' => 4, 'name' => 'dc1.heating.heater3.status'],
-            ['uri' => $uri, 'type' => 'uint16', 'address' => 5, 'name' => 'dc1.heating.heater4.status'],
-            ['uri' => $uri, 'type' => 'uint16', 'address' => 6, 'name' => 'dc1.heating.heater5.status'],
-            ['uri' => $uri, 'type' => 'uint16', 'address' => 7, 'name' => 'dc1.heating.heater6.status'],
-            ['uri' => $uri, 'type' => 'uint16', 'address' => 8, 'name' => 'dc1.heating.heater7.status'],
-            // will be another request as uri is different for subsequent string register
-            ['uri' => $uri, 'type' => 'uint16', 'address' => 9, 'name' => 'dc1.ventilation.valve1.status'],
-            ['uri' => $uri, 'type' => 'uint16', 'address' => 10, 'name' => 'dc1.ventilation.heater1.status'],
-            ['uri' => $uri, 'type' => 'uint16', 'address' => 11, 'name' => 'dc1.ventilation.fan1.status'],
-            ['uri' => $uri, 'type' => 'uint16', 'address' => 12, 'name' => 'dc1.it.main.temperature4'],
-            ['uri' => $uri, 'type' => 'uint16', 'address' => 13, 'name' => 'dc1.it.main.temperature3'],
-            ['uri' => $uri, 'type' => 'uint16', 'address' => 14, 'name' => 'dc1.engineering.main.temperature2'],
-            ['uri' => $uri, 'type' => 'uint16', 'address' => 15, 'name' => 'dc1.ventilation.heater1.temperature1'],
+            ['uri' => $uri, 'type' => 'uint16', 'address' => 0, 'name' => 'temp.inside'],
+            ['uri' => $uri, 'type' => 'uint16', 'address' => 1, 'name' => 'temp.outside'],
+
         ];
         $fc3RequestsFromArray = ReadRegistersBuilder::newReadHoldingRegisters()
             ->allFromArray($registers)
             ->build();
         try
         {
-            $responses = (new NonBlockingClient(['readTimeoutSec' => 1]))->sendRequests($fc3RequestsFromArray);
-            $responses->data['timestamp'] = date('U');
-            return $responses->data;
+            $responses = (new NonBlockingClient())->sendRequests($fc3RequestsFromArray);
+            //$responses->data['timestamp'] = date('U');
+            var_dump($responses);die;
+            return $responses;
         }
         catch(Exception $e)
         {
-            echo 'Проблемы с соединением: ',  $e->getMessage(), "\n";
+            echo 'Connection error: ',  $e->getMessage(), "\n";
             daemonStop(posix_getpid());
         }
     }

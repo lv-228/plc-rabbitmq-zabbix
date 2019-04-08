@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc76baff60dc9686b04053e546e9283ff
+class ComposerStaticInit161275dab068e0489b546c69a9ef50d6
 {
     public static $files = array (
         'e8aa6e4b5a1db2f56ae794f1505391a8' => __DIR__ . '/..' . '/amphp/amp/lib/functions.php',
@@ -99,8 +99,8 @@ class ComposerStaticInitc76baff60dc9686b04053e546e9283ff
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc76baff60dc9686b04053e546e9283ff::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc76baff60dc9686b04053e546e9283ff::$prefixDirsPsr4;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit161275dab068e0489b546c69a9ef50d6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit161275dab068e0489b546c69a9ef50d6::$prefixDirsPsr4;
 
         }, null, ClassLoader::class);
     }

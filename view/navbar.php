@@ -5,8 +5,8 @@
   {
     setcookie("zabbix_auth", "", time() - 3600);
   }
-  if(!isset($_COOKIE['rabbits']))
-    zabbix::getAllRabbitsInCookie('172.17.0.',4);
+  // if(!isset($_COOKIE['rabbits']))
+  //   zabbix::getAllRabbitsInCookie('172.17.0.',4);
   $rabbit =  isset($_GET['rabbit']) ? '?rabbit=' . $_GET['rabbit'] : '';
   //var_dump($_COOKIE);
 ?>
@@ -48,14 +48,14 @@
   <?php endif; ?>
   <nav class="navbar navbar-dark bg-primary navbar-expand-lg">
   <div class="btn-group">
-  <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    <?= isset($_GET['rabbit']) ? 'RabbitMQ: ' . $_GET['rabbit'] : 'Доступные RabbitMQ' ; ?>
+  <form action="" form='get'>
+    <input type="" name="rabbit">
+      <button type="button" class="btn btn-warning" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <?= isset($_GET['rabbit']) ? 'Подключен: ' . $_GET['rabbit'] : 'Подключится к RabbitMQ' ; ?>
   </button>
-  <div class="dropdown-menu">
-    <?php for( $i = 0; $i < count($_COOKIE['rabbits']); $i++ ): ?>
-      <a class="dropdown-item" href= <?= $_SERVER['PHP_SELF'] . '?' . 'rabbit=' . $_COOKIE['rabbits'][$i] ?> > <?= $_COOKIE['rabbits'][$i] ?></a>
-    <?php endfor; ?>
-  </div>
+  </form>
+
+<!--       <a class="dropdown-item" href= <?= $_SERVER['PHP_SELF'] . '?' . 'rabbit=' . $_COOKIE['rabbits'][$i] ?> > <?= $_COOKIE['rabbits'][$i] ?></a> -->
 <!--   <div class="dropdown-menu">
     <a class="dropdown-item" href="#">Action</a>
     <a class="dropdown-item" href="#">Another action</a>

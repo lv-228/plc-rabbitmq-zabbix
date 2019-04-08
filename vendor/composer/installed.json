@@ -1,17 +1,17 @@
 [
     {
         "name": "aldas/modbus-tcp-client",
-        "version": "1.0.3",
-        "version_normalized": "1.0.3.0",
+        "version": "1.1.0",
+        "version_normalized": "1.1.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/aldas/modbus-tcp-client.git",
-            "reference": "4e2be8aef3875b995ba2a5575cb15e5d6a8c725d"
+            "reference": "e22a138d5d555c01600322cd3eee1794d0d96fb9"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/aldas/modbus-tcp-client/zipball/4e2be8aef3875b995ba2a5575cb15e5d6a8c725d",
-            "reference": "4e2be8aef3875b995ba2a5575cb15e5d6a8c725d",
+            "url": "https://api.github.com/repos/aldas/modbus-tcp-client/zipball/e22a138d5d555c01600322cd3eee1794d0d96fb9",
+            "reference": "e22a138d5d555c01600322cd3eee1794d0d96fb9",
             "shasum": ""
         },
         "require": {
@@ -27,7 +27,7 @@
         "suggest": {
             "psr/log": "Required for using the Log middleware with BinaryStreamConnection"
         },
-        "time": "2019-01-26T17:23:39+00:00",
+        "time": "2019-04-06T16:17:56+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -621,17 +621,17 @@
     },
     {
         "name": "php-amqplib/php-amqplib",
-        "version": "v2.8.1",
-        "version_normalized": "2.8.1.0",
+        "version": "v2.9.1",
+        "version_normalized": "2.9.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/php-amqplib/php-amqplib.git",
-            "reference": "84449ffd3f5a7466bbee3946facb3746ff11f075"
+            "reference": "bde215e0b62d361d8316e8c2c1f1a0ffd71deab6"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/php-amqplib/php-amqplib/zipball/84449ffd3f5a7466bbee3946facb3746ff11f075",
-            "reference": "84449ffd3f5a7466bbee3946facb3746ff11f075",
+            "url": "https://api.github.com/repos/php-amqplib/php-amqplib/zipball/bde215e0b62d361d8316e8c2c1f1a0ffd71deab6",
+            "reference": "bde215e0b62d361d8316e8c2c1f1a0ffd71deab6",
             "shasum": ""
         },
         "require": {
@@ -643,12 +643,13 @@
             "videlalvaro/php-amqplib": "self.version"
         },
         "require-dev": {
+            "ext-curl": "*",
+            "nategood/httpful": "^0.2.20",
             "phpdocumentor/phpdocumentor": "^2.9",
             "phpunit/phpunit": "^4.8",
-            "scrutinizer/ocular": "^1.1",
             "squizlabs/php_codesniffer": "^2.5"
         },
-        "time": "2018-11-13T09:35:17+00:00",
+        "time": "2019-03-26T18:25:18+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {

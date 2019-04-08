@@ -11,7 +11,7 @@ class ResultContainer implements \ArrayAccess, \IteratorAggregate
     /**
      * @var array
      */
-    public $data;
+    private $data;
     /**
      * @var array
      */
