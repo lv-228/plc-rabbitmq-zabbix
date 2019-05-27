@@ -807,7 +807,7 @@ function getId($message){
 <script src="//cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
 <script>
-    mqttConnect('172.17.0.3');
+    // mqttConnect('172.17.0.3');
 </script>
 </body>
 </html>

@@ -12,8 +12,10 @@ namespace zabbix;
   	if(isset($_POST['login']))
   	{
     	$answerLogin = api::zabbixLogin( 'localhost', $_POST['login']['user'], $_POST['login']['password'] );
-    	if($answerLogin['error']['data'] == 'Login name or password is incorrect.')
-    		header('location: ' . 'view/monitoring_zabbix_plugins.php' . '?auth=false');
+    	if(isset($answerLogin['error']['data']) &&  $answerLogin['error']['data'] == 'Login name or password is incorrect.'){
+    		header('location: view/monitoring_zabbix_plugins.php?auth=false');
+        die;
+      }
     	if(isset($answerLogin['result']))
     	{
       		setcookie('zabbix_auth', $answerLogin['result']);

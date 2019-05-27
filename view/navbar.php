@@ -1,7 +1,8 @@
 <?php
   require_once('../class/zabbix_api.php');
   use zabbix\api;
-  $rabbit =  isset($_GET['rabbit']) ? '?rabbit=' . $_GET['rabbit'] : '';
+  $rabbit =  isset($_GET['rabbit']) ? $_GET['rabbit'] : '';
+  $zabbix =  isset($_GET['zabbix']) ? $_GET['zabbix'] : '';
 ?>
 <!DOCTYPE html>
 <html>
@@ -19,11 +20,11 @@
       <form action="/index.php" method="post" class="col-12">
         <div class="form-group">
           <label for="formGroupExampleInput">Логин</label>
-          <input name='login[user]' type="text" class="form-control" id="formGroupExampleInput" placeholder="Login">
+          <input name='login[user]' type="text" class="form-control" id="formGroupExampleInput" placeholder="Login" required="">
         </div>
         <div class="form-group">
           <label for="formGroupExampleInput2">Пароль</label>
-          <input name='login[password]' type="text" class="form-control" id="formGroupExampleInput2" placeholder="Password">
+          <input name='login[password]' type="text" class="form-control" id="formGroupExampleInput2" placeholder="Password" required="">
         </div>
         <?php if(isset($_GET['auth']) && $_GET['auth'] == 'false'): ?>
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -39,65 +40,52 @@
   </div>
   <?php exit(0); ?>
   <?php endif; ?>
-  <nav class="navbar navbar-dark bg-primary navbar-expand-lg">
-  <form class="form-inline col-4" action="" type='get'>
-  <div class="form-group">
-    <input name='rabbit' type="text" class="form-control col-4" placeholder="RabbitIP" pattern="[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}" required="">
-    <input name='zabbix' type="text" class="form-control col-4" placeholder="ZabbixIP" pattern="[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}" required="">
-  </div>
-  <button type="submit" class="btn btn-warning"><span class = "glyphicon glyphicon-search"></span> Подключиться</button>
-</form>
-<!--   <div class="btn-group">
-    <form action="" type="get">
-      <input type="" name="rabbit">
-      <button type="submit" class="btn btn-danger"><?= isset($_GET['rabbit']) ? $_GET['rabbit'] : 'Подключиться к RabbitMQ' ?></button>
-    </form>
-      <!-- <a class="dropdown-item" href= <?= $_SERVER['PHP_SELF'] . '?' . 'rabbit=' . $_COOKIE['rabbits'][$i] ?> > <?= $_COOKIE['rabbits'][$i] ?></a> -->
-<!--   <div class="dropdown-menu">
-    <a class="dropdown-item" href="#">Action</a>
-    <a class="dropdown-item" href="#">Another action</a>
-    <a class="dropdown-item" href="#">Something else here</a>
-    <div class="dropdown-divider"></div>
-    <a class="dropdown-item" href="#">Ссылка отделенная чертой</a>
-  </div> -->
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+    <nav class="navbar navbar-dark bg-primary navbar-expand-lg">
+      <?php if($rabbit == '' || $zabbix == ''): ?>
+        <form class="form-inline col-4" action="" type='get'>
+          <div class="form-group">
+            <input name='rabbit' type="text" class="form-control col-4" placeholder="RabbitIP" pattern="[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}" required=""value="<?= $rabbit ?>">
+            &nbsp
+            <input name='zabbix' type="text" class="form-control col-4" placeholder="ZabbixIP" pattern="[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}" required="" value="<?= $zabbix ?>">
+          </div>
+         <button type="submit" class="btn btn-warning"><span class = "glyphicon glyphicon-search"></span> Подключиться</button>
+        </form>
+        <h1 class=" p-3 mb-2 bg-warning text-white">Не введены данные: RabbitMQ, Zabbix!</h1>
+    </span>
+        <?php exit(0); ?>
+      <?php else: ?>
+        <form class="form-inline col-4" action="" type='get'>
+          <input name='rabbit' type="text" class="form-control col-3" placeholder="RabbitIP" pattern="[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}" required=""value="<?= $rabbit ?>">
+              &nbsp
+          <input name='zabbix' type="text" class="form-control col-3" placeholder="ZabbixIP" pattern="[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}" required="" value="<?= $zabbix ?>">
+          &nbsp
+          <button type="submit" class="btn btn-warning"><span class = "glyphicon glyphicon-search"></span> Изменить</button>
+        </form>
+      <?php endif; ?>
+
   <div class="collapse navbar-collapse" id="navbarText">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href=<?= 'add_zabbix_consumer_control.php' . $rabbit ?>>Создание шаблона <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href=<?= 'add_zabbix_consumer_control.php?rabbit=' . $rabbit . '&zabbix=' . $zabbix?>>Создание шаблона <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="<?= 'start_zabbix_consumer.php' . $rabbit ?>">zabbix_consumer <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="<?= 'start_zabbix_consumer.php?rabbit=' . $rabbit .'&zabbix=' . $zabbix ?>">zabbix_consumer <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="<?= 'start_rabbitmq_sender.php' . $rabbit ?>">rabbitmq_sender <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="<?= 'start_rabbitmq_sender.php?rabbit=' . $rabbit .'&zabbix=' . $zabbix ?>">rabbitmq_sender <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item  active" >
-        <a class="nav-link" href="<?= 'monitoring_dc.php' . $rabbit ?>">Визуализация</a>
+        <a class="nav-link" href="<?= 'monitoring_dc.php?rabbit=' . $rabbit .'&zabbix=' . $zabbix ?>">Визуализация</a>
       </li>
       <li class="nav-item  active">
-        <a class="nav-link" href="<?= 'monitoring_zabbix_plugins.php' . $rabbit ?>">Мониторинг </a>
+        <a class="nav-link" href="<?= 'monitoring_zabbix_plugins.php?rabbit=' . $rabbit .'&zabbix=' . $zabbix ?>">Мониторинг </a>
       </li>
     </ul>
-<!--     <button class="btn btn-warning" data-toggle="collapse" data-target="#hide-me">Список RabbitMQ</button>
-<div id="hide-me" class="collapse in">
-  <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-    <?php for( $i = 0; $i < count($_COOKIE['rabbits']); $i++ ): ?>
-      <a <?php echo "onclick=\"ajax('" . $_COOKIE['rabbits'][$i] . "', 'http://localhost:8080/getAllConnectionsToRabbit.php')\"" ?> class="nav-link" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true"><?= $_COOKIE['rabbits'][$i] ?></a>
-    <?php endfor; ?>
-  </div>
-</div> -->
+    </div>
     <span class="navbar-text">
       <form action='/index.php' method="post">
         <input type="hidden" name="logout" value="yeah">
         <button class="btn btn-warning" type="submit"> Выйти </button>
       </form>
     </span>
-  </div>
 </nav>
-  <?php if(!isset($_GET['rabbit'])): ?>
-    <h1 class=" p-3 mb-2 bg-warning text-white">RabbitMQ не выбран!</h1>
-    <?php exit(0); ?>
-  <?php endif; ?>
