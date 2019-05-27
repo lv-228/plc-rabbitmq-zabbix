@@ -1,7 +1,5 @@
 {
 	"require": {
-		"php-amqplib/php-amqplib": ">=2.6.1",
-		"amphp/socket": "^0.10.11",
-		"aldas/modbus-tcp-client": "^1.0"
+		"php-amqplib/php-amqplib": ">=2.6.1"
 	}
 }

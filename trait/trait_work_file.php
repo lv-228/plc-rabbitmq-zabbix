@@ -88,7 +88,7 @@ trait work_with_file
       		$zip->open( $uploadfile );
       		$zip->extractTo( $uploaddir );
       		unlink($uploaddir  . '[Content_Types].xml');
-      		unlink( $uploadfile );
+      		//unlink( $uploadfile );
       		self::delTree($uploaddir . '_rels');
     	}
     	else

@@ -1,7 +1,14 @@
 <?php
   require_once('../class/zabbix_api.php');
   use zabbix\api;
+  if(isset($_POST['logout']))
+  {
+    setcookie("zabbix_auth", "", time() - 3600);
+  }
+  // if(!isset($_COOKIE['rabbits']))
+  //   zabbix::getAllRabbitsInCookie('172.17.0.',4);
   $rabbit =  isset($_GET['rabbit']) ? '?rabbit=' . $_GET['rabbit'] : '';
+  //var_dump($_COOKIE);
 ?>
 <!DOCTYPE html>
 <html>
@@ -40,19 +47,15 @@
   <?php exit(0); ?>
   <?php endif; ?>
   <nav class="navbar navbar-dark bg-primary navbar-expand-lg">
-  <form class="form-inline col-4" action="" type='get'>
-  <div class="form-group">
-    <input name='rabbit' type="text" class="form-control col-4" placeholder="RabbitIP" pattern="[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}" required="">
-    <input name='zabbix' type="text" class="form-control col-4" placeholder="ZabbixIP" pattern="[0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}[.][0-9]{1,3}" required="">
-  </div>
-  <button type="submit" class="btn btn-warning"><span class = "glyphicon glyphicon-search"></span> Подключиться</button>
-</form>
-<!--   <div class="btn-group">
-    <form action="" type="get">
-      <input type="" name="rabbit">
-      <button type="submit" class="btn btn-danger"><?= isset($_GET['rabbit']) ? $_GET['rabbit'] : 'Подключиться к RabbitMQ' ?></button>
-    </form>
-      <!-- <a class="dropdown-item" href= <?= $_SERVER['PHP_SELF'] . '?' . 'rabbit=' . $_COOKIE['rabbits'][$i] ?> > <?= $_COOKIE['rabbits'][$i] ?></a> -->
+  <div class="btn-group">
+  <form action="" form='get'>
+    <input type="" name="rabbit">
+      <button type="button" class="btn btn-warning" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <?= isset($_GET['rabbit']) ? 'Подключен: ' . $_GET['rabbit'] : 'Подключится к RabbitMQ' ; ?>
+  </button>
+  </form>
+
+<!--       <a class="dropdown-item" href= <?= $_SERVER['PHP_SELF'] . '?' . 'rabbit=' . $_COOKIE['rabbits'][$i] ?> > <?= $_COOKIE['rabbits'][$i] ?></a> -->
 <!--   <div class="dropdown-menu">
     <a class="dropdown-item" href="#">Action</a>
     <a class="dropdown-item" href="#">Another action</a>
@@ -60,25 +63,23 @@
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="#">Ссылка отделенная чертой</a>
   </div> -->
+</div>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarText">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href=<?= 'add_zabbix_consumer_control.php' . $rabbit ?>>Создание шаблона <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href=<?= 'add_zabbix_consumer_control.php' . $rabbit ?>>Добавить плагин в zabbix <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="<?= 'start_zabbix_consumer.php' . $rabbit ?>">zabbix_consumer <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="<?= 'start_rabbitmq_sender.php' . $rabbit ?>">rabbitmq_sender <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="<?= 'start_zabbix_consumer.php' . $rabbit ?>">Запустить zabbix_consumer <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item  active" >
         <a class="nav-link" href="<?= 'monitoring_dc.php' . $rabbit ?>">Визуализация</a>
       </li>
       <li class="nav-item  active">
-        <a class="nav-link" href="<?= 'monitoring_zabbix_plugins.php' . $rabbit ?>">Мониторинг </a>
+        <a class="nav-link" href="<?= 'monitoring_zabbix_plugins.php' . $rabbit ?>">Мониторинг zabbix_consumer </a>
       </li>
     </ul>
 <!--     <button class="btn btn-warning" data-toggle="collapse" data-target="#hide-me">Список RabbitMQ</button>

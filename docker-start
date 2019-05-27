@@ -1,0 +1,7 @@
+#!/bin/bash
+
+docker start mysql-server
+docker start zabbix-java-gateway
+docker start zabbix-server-mysql
+docker start zabbix-web-nginx-mysql
+

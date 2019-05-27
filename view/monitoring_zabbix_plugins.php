@@ -64,27 +64,7 @@ namespace zabbix;
 </table>
 <?php endif; ?>
   <br>
-  <!-- <h1>Передача данных из PLC в RabbitMQ</h1>
-  <br>
-  <table class="table">
-    <thead class="thead-light">
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Адресс PLC</th>
-        <th scope="col">Статус</th>
-        <th scope="col">RabbitMQ Key</th>
-      </tr>
-    </thead>
-  <tbody>
-    <tr class="table-success">
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-  </tbody>
-</table>
-  </div>
+  <!-- 
   <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">.2..</div>
   <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">.3..</div>
   <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">.4..</div>

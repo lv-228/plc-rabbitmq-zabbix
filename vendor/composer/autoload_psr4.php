@@ -7,15 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'PhpAmqpLib\\' => array($vendorDir . '/php-amqplib/php-amqplib/PhpAmqpLib'),
-    'ModbusTcpClient\\' => array($vendorDir . '/aldas/modbus-tcp-client/src'),
-    'LibDNS\\' => array($vendorDir . '/daverandom/libdns/src'),
-    'Amp\\WindowsRegistry\\' => array($vendorDir . '/amphp/windows-registry/lib'),
-    'Amp\\Uri\\' => array($vendorDir . '/amphp/uri/src'),
-    'Amp\\Socket\\' => array($vendorDir . '/amphp/socket/src'),
-    'Amp\\Process\\' => array($vendorDir . '/amphp/process/lib'),
-    'Amp\\Parser\\' => array($vendorDir . '/amphp/parser/lib'),
-    'Amp\\Dns\\' => array($vendorDir . '/amphp/dns/lib'),
-    'Amp\\Cache\\' => array($vendorDir . '/amphp/cache/lib'),
-    'Amp\\ByteStream\\' => array($vendorDir . '/amphp/byte-stream/lib'),
-    'Amp\\' => array($vendorDir . '/amphp/amp/lib'),
 );
